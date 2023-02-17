@@ -12,7 +12,7 @@ export class CounterButtonsComponent implements OnInit {
   constructor(private store: Store<{ counter: CounterState }>) { }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    //throw new Error('Method not implemented.');
   }
 
   onIncrement() {

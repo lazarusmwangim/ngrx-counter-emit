@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CounterState } from '../+store/counter.state';
-import { customIncrement } from '../+store/counter.actions';
+import { changeChangeChannelName, customIncrement } from '../+store/counter.actions';
+import { getChannelName, getCounter } from '../+store/counter.selectors';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-counter-custom-input',
@@ -10,13 +12,19 @@ import { customIncrement } from '../+store/counter.actions';
 })
 export class CounterCustomInputComponent implements OnInit {
   value!: number;
+  channelName$!: Observable<string>;
+
   constructor(private store: Store<{ counter: CounterState }>) { }
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.channelName$ = this.store.select(getChannelName);
   }
 
   onAdd() {
-    this.store.dispatch(customIncrement({ value: +this.value }))
-    throw new Error('Method not implemented.');
+    this.store.dispatch(customIncrement({ value: +this.value }));
+  }
+
+  onChangeChannelName() {
+    this.store.dispatch(changeChangeChannelName())
   }
 }
