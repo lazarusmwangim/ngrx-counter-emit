@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { decrement, increment, reset } from '../+store/counter.actions';
 import { CounterState } from '../+store/counter.state';
+import { AppState } from 'src/app/+store/app.state';
 
 @Component({
   selector: 'app-counter-buttons',
@@ -9,7 +10,7 @@ import { CounterState } from '../+store/counter.state';
   styleUrls: ['./counter-buttons.component.css']
 })
 export class CounterButtonsComponent implements OnInit {
-  constructor(private store: Store<{ counter: CounterState }>) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
     //throw new Error('Method not implemented.');
