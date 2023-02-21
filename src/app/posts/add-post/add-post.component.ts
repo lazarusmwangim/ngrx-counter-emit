@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/+store/app.state';
+import { Post } from '../+store/posts.state';
+import { addPost } from '../+store/posts.action';
 
 @Component({
   selector: 'app-add-post',
@@ -31,13 +33,20 @@ export class AddPostComponent implements OnInit {
       }
     }
 
-    return 
+    return
   }
 
   onAddPost() {
-    if(!this.postForm.valid){
+    if (!this.postForm.valid) {
       return;
     }
-    console.log(this.postForm.value)
+
+    const post: Post = {
+      title: this.postForm.value.title,
+      description: this.postForm.value.description
+    }
+
+    this.store.dispatch(addPost({post: post}));
+    // console.log(this.postForm.value)
   }
 }
