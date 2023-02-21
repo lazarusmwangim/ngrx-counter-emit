@@ -2,17 +2,29 @@
     <div class="col-md-12">
         <h3>Add Post</h3>
         <hr />
-        <form action="">
+        <form action="" [formGroup]="postForm" (ngSubmit)="onAddPost()">
             <div class="mb-3">
                 <label for="">Title</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" formControlName="title">
+                <div *ngIf="postForm.get('title')!.touched && !postForm.get('title')!.valid">
+
+                    <div *ngIf="postForm.get('title')?.errors?.['required']">
+                        Title is required
+                    </div>
+
+                    <div *ngIf="postForm.get('title')?.errors?.['minlength']">
+                        Title Min Length
+                    </div>
+
+                </div>
             </div>
             <div class="mb-3">
                 <label for="">Description</label>
-                <input type="textarea" class="form-control">
+                <input type="textarea" class="form-control" formControlName="description">
+                <div>{{ showDescription() }}</div>
             </div>
             <div class="my-3">
-                <button type="submit" class="btn btn-primary">Add Post</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!postForm.valid">Add Post</button>
             </div>
         </form>
     </div>
