@@ -2,7 +2,7 @@
     <div class="col-md-8">
         <h3>Posts List</h3>
         <div>
-            <a href="#" class="btn btn-primary" [routerLink]="['/posts/add']">App Post</a>
+            <a href="#" class="btn btn-primary" [routerLink]="['/posts', 'add']">App Post</a>
         </div>
         <table class="table table-striped">
             <thead>
@@ -10,6 +10,7 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Description</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,6 +18,11 @@
                     <td>{{post.id}}</td>
                     <td>{{post.title}}</td>
                     <td>{{post.description}}</td>
+                    <td>
+                        <a href="#" class="btn btn-primary" [routerLink]="['edit', post.id]">Update</a>
+                        &nbsp;
+                        <a class="btn btn-danger" (click)="onDeletePost(post.id? post.id: -1)">Delete</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
