@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedSpinnerComponent } from './shared/components/shared-spinner/shared-spinner.component';
+import { appReducer } from './+store/app.state';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { SharedSpinnerComponent } from './shared/components/shared-spinner/share
     ReactiveFormsModule,
     HttpClientModule,
     EffectsModule.forRoot([]),
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({
       // maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode}),
