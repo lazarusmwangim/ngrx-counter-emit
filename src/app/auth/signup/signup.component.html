@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h3>Sign UP</h3>
+            <hr/>
+            <form [formGroup]="signUpForm" (ngSubmit)="onSignUpSubmit()">
+                <div class="mb-3">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" class="form-control" formControlName="username">
+                    <div *ngIf="signUpForm.get('username')?.touched && !signUpForm.get('username')?.valid" role="alert" class="alert alert-danger"> {{ confirmUsername() }}</div>
+                </div>
+                <div class="mb-3">
+                    <label for="password">Password</label>
+                    <input class="form-control" id="password" type="password" formControlName="password">
+                    <div *ngIf="signUpForm.get('password')?.touched && !signUpForm.get('password')?.valid" role="alert" class="alert alert-danger">{{ confirmPassword() }}</div>
+                </div>
+                <div class="mb-3">
+                    <button [disabled]="!signUpForm.valid" type="submit" class="btn btn-primary">SignUp</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,9 @@ export const LOGIN_START = '[auth page] login start';
 export const LOGIN_SUCCESS_EMPLOYEE = '[auth page] login success employee';
 export const LOGIN_SUCCESS_CUSTOMER = '[auth page] login success customer';
 export const LOGIN_FAILURE = '[auth page] login failure';
+export const SIGNUP_START = '[auth page] signup start';
+export const SIGNUP_SUCCESS = '[auth page] signup sucess';
+export const SIGNUP_FAILURE = '[auth page] signup failure';
 
 export const loginStart = createAction(LOGIN_START,
     props<{ username: string, password: string }>()
@@ -23,3 +26,16 @@ export const loginSuccessCustomer = createAction(
 );
 
 export const loginFailure = createAction(LOGIN_FAILURE);
+
+export const signUpStart = createAction(
+    SIGNUP_START,
+    props<{ username: string, password: string }>()
+);
+
+export const signUpSuccess = createAction(
+    SIGNUP_SUCCESS,
+);
+
+export const signUpFailure = createAction(
+    SIGNUP_FAILURE,
+)

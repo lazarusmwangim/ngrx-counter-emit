@@ -2,38 +2,41 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/+store/app.state';
-import { loginStart } from '../+store/auth.actions';
 import { setLoadingSpinner } from 'src/app/shared/+store/shared.actions';
+import { signUpStart } from '../+store/auth.actions';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
 })
-export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
+export class SignupComponent implements OnInit {
+  signUpForm!: FormGroup;
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
+    this.signUpForm = new FormGroup({
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required])
     })
   }
 
-  onLoginSubmit() {
-    console.log(this.loginForm.value)
-    const username = this.loginForm.value.username;
-    const password = this.loginForm.value.password;
+  onSignUpSubmit() {
+    if (!this.signUpForm.valid) {
+      return;
+    }
 
-    // SHow loading spibnner
+    const username = this.signUpForm.value.username;
+    const password = this.signUpForm.value.password;
+
     this.store.dispatch(setLoadingSpinner({ status: true }));
-    this.store.dispatch(loginStart({ username, password }));
+    this.store.dispatch(signUpStart({ username, password }));
   }
 
+  // Errors handling
   confirmUsername() {
-    const username = this.loginForm.get('username');
+    const username = this.signUpForm.get('username');
 
     if (username?.touched && !username.valid) {
       if (username.errors?.['required']) {
@@ -48,7 +51,7 @@ export class LoginComponent implements OnInit {
   }
 
   confirmPassword() {
-    const password = this.loginForm.get('password');
+    const password = this.signUpForm.get('password');
 
     if (password?.touched && !password.valid) {
       if (password.errors?.['required']) {
@@ -61,5 +64,4 @@ export class LoginComponent implements OnInit {
 
     return
   }
-
 }
