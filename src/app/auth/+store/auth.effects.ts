@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { loginFailure, loginStart, loginSuccessCustomer, loginSuccessEmployee } from "./auth.actions";
+import { loginFailure, loginStart, loginSuccessCustomer, loginSuccessEmployee, signUpFailure, signUpStart } from "./auth.actions";
 import { catchError, exhaustMap, map, of, tap } from "rxjs";
 import { AuthService } from "src/app/_services/auth.service";
 import { AppState } from "src/app/+store/app.state";
 import { Store } from "@ngrx/store";
 import { setErrorMessage, setLoadingSpinner } from "src/app/shared/+store/shared.actions";
 import { Router } from "@angular/router";
+import { signUpSuccess } from "./auth.actions";
 
 
 @Injectable()
@@ -31,7 +32,7 @@ export class AuthEffects {
 
                         if (data?.success === false) {
                             console.log("Login failure");
-                            const errorMessage = data.message ? data.message : '';
+                            const errorMessage = data.message ? data.message : 'Login failure';
                             this.store.dispatch(setErrorMessage({ message: errorMessage }))
                             return loginFailure();
                         }
@@ -63,5 +64,28 @@ export class AuthEffects {
             ))
     },
         { dispatch: false }
-    )
+    );
+
+    signup$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(signUpStart),
+            exhaustMap((action) => {
+                return this.authService.signup(action.username, action.password).pipe(
+                    map((data) => {
+                        this.store.dispatch(setLoadingSpinner({ status: false }))
+                        console.log(data);
+
+                        if (data?.success === false) {
+                            const message = data.message ? data.message : 'Error signing up.';
+                            this.store.dispatch(setErrorMessage({ message }));
+                            return signUpFailure();
+                        } else if (data?.id) {
+                            return signUpSuccess();
+                        }
+                        return signUpFailure();
+                    })
+                )
+            })
+        )
+    })
 }

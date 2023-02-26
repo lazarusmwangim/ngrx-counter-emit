@@ -5,6 +5,7 @@ import { environment } from "src/environments/environment";
 import { AuthResponse } from "../_models/auth-response.model";
 import { Employee } from "../_models/employee.model";
 import { Customer } from "../_models/customer.model";
+import { SignUpResponse } from "../_models/signup-response.model";
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,12 @@ export class AuthService {
         return this.http.post<AuthResponse>(this.url + "users/login", {
             username,
             password
+        }, { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } })
+    }
+
+    signup(username: string, password: string): Observable<SignUpResponse> {
+        return this.http.post<SignUpResponse>(this.url + "users", {
+            username, password
         }, { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } })
     }
 
