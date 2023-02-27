@@ -11,18 +11,22 @@ export const SIGNUP_START = '[auth page] signup start';
 export const SIGNUP_SUCCESS = '[auth page] signup sucess';
 export const SIGNUP_FAILURE = '[auth page] signup failure';
 
+export const AUTO_LOGIN_ACTION = '[auth page] auto login';
+
+export const LOGOUT_ACTION = '[auth page] auto logout';
+
 export const loginStart = createAction(LOGIN_START,
     props<{ username: string, password: string }>()
 );
 
 export const loginSuccessEmployee = createAction(
     LOGIN_SUCCESS_EMPLOYEE,
-    props<{ user: Employee }>()
+    props<{ user: Employee, redirect: boolean }>()
 );
 
 export const loginSuccessCustomer = createAction(
     LOGIN_SUCCESS_CUSTOMER,
-    props<{ user: Customer }>()
+    props<{ user: Customer, redirect: boolean }>()
 );
 
 export const loginFailure = createAction(LOGIN_FAILURE);
@@ -38,4 +42,8 @@ export const signUpSuccess = createAction(
 
 export const signUpFailure = createAction(
     SIGNUP_FAILURE,
-)
+);
+
+export const autoLogin = createAction(AUTO_LOGIN_ACTION);
+
+export const autoLogout = createAction(LOGOUT_ACTION);

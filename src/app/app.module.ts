@@ -13,6 +13,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedSpinnerComponent } from './shared/components/shared-spinner/shared-spinner.component';
 import { appReducer } from './+store/app.state';
+import { AuthEffects } from './auth/+store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { appReducer } from './+store/app.state';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AuthEffects]),
     StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({
       // maxAge: 25, // Retains last 25 states

@@ -8,5 +8,15 @@ export class Employee {
         private expirationTime: number
     ) { }
 
-    
+    getExpirationTime() {
+        return this.expirationTime;
+    }
+     
+    getAccessToken() {
+        return this.accessToken;
+    }
+
+    isEmployee() {
+        return true;
+    }
 }

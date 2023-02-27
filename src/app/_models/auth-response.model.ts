@@ -9,6 +9,7 @@ export interface AuthResponse {
     permissions?: string[];
     employee_id?: number;
 
+    id?: number;
     group_id?: number;
     group?: string;
     role?: string;

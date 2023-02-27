@@ -1,13 +1,15 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { loginFailure, loginStart, loginSuccessCustomer, loginSuccessEmployee, signUpFailure, signUpStart } from "./auth.actions";
-import { catchError, exhaustMap, map, of, tap } from "rxjs";
+import { autoLogin, autoLogout, loginFailure, loginStart, loginSuccessCustomer, loginSuccessEmployee, signUpFailure, signUpStart } from "./auth.actions";
+import { catchError, exhaustMap, map, mergeMap, of, tap } from "rxjs";
 import { AuthService } from "src/app/_services/auth.service";
 import { AppState } from "src/app/+store/app.state";
 import { Store } from "@ngrx/store";
 import { setErrorMessage, setLoadingSpinner } from "src/app/shared/+store/shared.actions";
 import { Router } from "@angular/router";
 import { signUpSuccess } from "./auth.actions";
+import { Customer } from "src/app/_models/customer.model";
+import { Employee } from "src/app/_models/employee.model";
 
 
 @Injectable()
@@ -38,11 +40,17 @@ export class AuthEffects {
                         }
                         else if (data?.employee_id) {
                             this.store.dispatch(setErrorMessage({ message: '' }))
-                            return loginSuccessEmployee({ user: this.authService.formatEmployee(data) });
+
+                            const user = this.authService.formatEmployee(data);
+                            this.authService.setEmployeeInLocalStorage(user);
+                            return loginSuccessEmployee({ user, redirect: true });
                         }
                         else if (data?.group_id) {
-                            this.store.dispatch(setErrorMessage({ message: '' }))
-                            return loginSuccessCustomer({ user: this.authService.formatCustomer(data) })
+                            this.store.dispatch(setErrorMessage({ message: '' }));
+
+                            const user = this.authService.formatCustomer(data);
+                            this.authService.setCustomerInLocalStorage(user);
+                            return loginSuccessCustomer({ user, redirect: true })
                         }
 
                         return loginFailure();
@@ -57,9 +65,11 @@ export class AuthEffects {
     });
 
     loginRedirect$ = createEffect(() => {
-        return this.actions$.pipe(ofType(loginSuccessCustomer),
+        return this.actions$.pipe(ofType(...[loginSuccessCustomer, loginSuccessEmployee]),
             tap(action => {
-                this.router.navigate(['/'])
+                if (action.redirect) {
+                    this.router.navigate(['/']);
+                }
             }
             ))
     },
@@ -80,6 +90,7 @@ export class AuthEffects {
                             this.store.dispatch(setErrorMessage({ message }));
                             return signUpFailure();
                         } else if (data?.id) {
+                            this.store.dispatch(setErrorMessage({ message: '' }))
                             return signUpSuccess();
                         }
                         return signUpFailure();
@@ -87,5 +98,30 @@ export class AuthEffects {
                 )
             })
         )
-    })
+    });
+
+    autoLogin$ = createEffect(() => {
+        return this.actions$.pipe(ofType(autoLogin),
+            mergeMap((action) => {
+                const user = this.authService.getUserFromLocalStorage();
+                if (user instanceof Customer) {
+                    return of(loginSuccessCustomer({ user, redirect: false }))
+                } else if (user instanceof Employee) {
+                    return of(loginSuccessEmployee({ user, redirect: false }))
+                }
+
+                return of(loginFailure())
+            })
+        )
+    }/* , { dispatch: false } */
+    );
+
+    logout$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(autoLogout),
+            map((action) => {
+                this.authService.logout();
+                this.router.navigate(['/auth'])
+            }))
+    }, { dispatch: false })
 }
