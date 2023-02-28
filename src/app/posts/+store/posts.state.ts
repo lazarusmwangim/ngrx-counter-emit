@@ -9,7 +9,8 @@ export interface PostsState {
 }
 
 export const initialState: PostsState = {
-    posts: [
+    posts: [],
+    /* [
         {
             id: 1,
             title: "Title 1",
@@ -25,5 +26,5 @@ export const initialState: PostsState = {
             title: "Title 3",
             description: "Description of title 3"
         }
-    ]
+    ] */
 }

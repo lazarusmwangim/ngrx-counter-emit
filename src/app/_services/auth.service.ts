@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "src/environments/environment";
+import { environment } from "../../environments/environment";
 import { AuthResponse } from "../_models/auth-response.model";
 import { Employee } from "../_models/employee.model";
 import { Customer } from "../_models/customer.model";
