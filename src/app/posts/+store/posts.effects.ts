@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { AppState } from "src/app/+store/app.state";
 import { PostsService } from "src/app/_services/posts.service";
-import { loadPosts, loadPostsSuccess } from "./posts.action";
+import { addPost, addPostSuccess, loadPosts, loadPostsSuccess } from "./posts.action";
 import { map, mergeMap } from "rxjs";
 
 
@@ -31,4 +31,17 @@ export class PostsEffects {
         )
     }/* , { dispatch: false } */
     );
+
+    addPost$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(addPost),
+            mergeMap((action) => {
+                return this.postsService.addPost(action.post).pipe(map(
+                    (post) => {
+                        return addPostSuccess({ post });
+                    }
+                ))
+            })
+        )
+    });
 }

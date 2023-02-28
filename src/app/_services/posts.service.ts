@@ -29,4 +29,11 @@ export class PostsService {
             return posts;
         }))
     }
+
+    addPost(post: Post): Observable<Post> {
+        return this.http.post<Post>(this.url + "posts",
+            post,
+            { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }
+        )
+    }
 }
