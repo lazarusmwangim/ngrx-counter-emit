@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/+store/app.state';
 import { getPostByID } from '../+store/posts.selector';
@@ -13,19 +13,23 @@ import { updatePost } from '../+store/posts.action';
   templateUrl: './edit-post.component.html',
   styleUrls: ['./edit-post.component.css']
 })
-export class EditPostComponent implements OnInit, OnDestroy  {
+export class EditPostComponent implements OnInit, OnDestroy {
   postForm!: FormGroup;
   post!: Post;
   postSubscription!: Subscription;
 
-  constructor(private route: ActivatedRoute, private store: Store<AppState>) { }
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<AppState>,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.postSubscription = this.store.select(getPostByID, { id }).subscribe(data => {
         this.post = data;
-        console.log(data)
+        console.log(this.post)
         this.postForm = new FormGroup({
           title: new FormControl(this.post.title, [Validators.required, Validators.minLength(6)]),
           description: new FormControl(this.post.description, [Validators.required, Validators.minLength(10)])
@@ -35,7 +39,7 @@ export class EditPostComponent implements OnInit, OnDestroy  {
   }
 
   onUpdatePost() {
-    if(!this.postForm.valid) {
+    if (!this.postForm.valid) {
       return
     }
 
@@ -48,8 +52,9 @@ export class EditPostComponent implements OnInit, OnDestroy  {
       description
     }
 
-    this.store.dispatch(updatePost({post}))
-   }
+    this.store.dispatch(updatePost({ post }));
+    this.router.navigate(['/posts']);
+  }
 
   showTitle() {
     const desc = this.postForm.get('title');
@@ -80,8 +85,8 @@ export class EditPostComponent implements OnInit, OnDestroy  {
   }
 
   ngOnDestroy(): void {
-      if(this.postSubscription) {
-        this.postSubscription.unsubscribe();
-      }
+    if (this.postSubscription) {
+      this.postSubscription.unsubscribe();
+    }
   }
 }

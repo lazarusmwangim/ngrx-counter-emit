@@ -36,4 +36,9 @@ export class PostsService {
             { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }
         )
     }
+
+    updatePost(post: Post): Observable<Post> {
+        return this.http.patch<Post>(this.url + "posts/" + post.id,
+            post)
+    }
 }
