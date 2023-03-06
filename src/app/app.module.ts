@@ -20,7 +20,7 @@ import { AuthEffects } from './auth/+store/auth.effects';
     AppComponent,
     HomeComponent,
     HeaderComponent,
-    SharedSpinnerComponent
+    SharedSpinnerComponent,
   ],
   imports: [
     BrowserModule,
