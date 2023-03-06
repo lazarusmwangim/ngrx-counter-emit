@@ -10,6 +10,8 @@ export const UPDATE_POST_SUCCESS = '[posts page] update post success';
 export const UPDATE_POST_FAILURE = '[posts page] update post failure';
 
 export const DELETE_POST_ACTION = '[posts page] delete post';
+export const DELETE_POST_SUCCESS = '[posts page] delete post success';
+export const DELETE_POST_FAILURE = '[posts page] delete post failure';
 
 export const LOAD_POSTS = '[posts page] load posts';
 export const LOAD_POSTS_SUCCESS = '[posts page] load posts success';
@@ -34,7 +36,15 @@ export const updatePostFailure = createAction(
     props<{ message: string }>()
 );
 
-export const deletePost = createAction(DELETE_POST_ACTION, props<{ id: number }>());
+export const deletePost = createAction(
+    DELETE_POST_ACTION,
+    props<{ id: number }>()
+);
+
+export const deletePostSuccess = createAction(
+    DELETE_POST_SUCCESS,
+    props<{id: number}>()
+);
 
 export const loadPosts = createAction(LOAD_POSTS);
 

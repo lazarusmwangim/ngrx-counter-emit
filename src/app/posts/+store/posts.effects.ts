@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { AppState } from "src/app/+store/app.state";
 import { PostsService } from "src/app/_services/posts.service";
-import { addPost, addPostSuccess, loadPosts, loadPostsSuccess, updatePost, updatePostSuccess } from "./posts.action";
+import { addPost, addPostSuccess, deletePost, deletePostSuccess, loadPosts, loadPostsSuccess, updatePost, updatePostFailure, updatePostSuccess } from "./posts.action";
 import { map, mergeMap, switchMap } from "rxjs";
 
 
@@ -50,12 +50,32 @@ export class PostsEffects {
             ofType(updatePost),
             switchMap((action) => {
                 return this.postsService.updatePost(action.post).pipe(map(
-                    (post) => {
-                        console.log(post);
+                    (data) => {
+                        console.log(data)
+                        if (data.success === false) {
+                            const message = data.message ? data.message : "Error occured"
+                            return updatePostFailure({ message });
+                        }
+
                         return updatePostSuccess({ post: action.post });
                     }
                 ))
             })
         )
     });
+
+    deletePost$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(deletePost),
+            mergeMap((action) => {
+                const id = action.id
+                return this.postsService.deletePost(id).pipe(map(
+                    (data) => {
+                        console.log(data)
+                        return deletePostSuccess({ id });
+                    }
+                ))
+            })
+        )
+    })
 }

@@ -2,6 +2,11 @@ export interface Post {
     id?: number;
     title: string;
     description: string;
+
+    // On failure
+    success?: boolean;
+    message?: string;
+    error?: string;
 }
 
 export interface PostsState {

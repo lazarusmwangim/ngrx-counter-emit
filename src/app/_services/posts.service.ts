@@ -5,6 +5,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { Post } from "../posts/+store/posts.state";
 import { Observable, map } from "rxjs";
+import { PostUpdate } from "../_models/post-update.model";
 
 @Injectable({
     providedIn: 'root'
@@ -37,8 +38,12 @@ export class PostsService {
         )
     }
 
-    updatePost(post: Post): Observable<Post> {
-        return this.http.patch<Post>(this.url + "posts/" + post.id,
+    updatePost(post: Post): Observable<PostUpdate> {
+        return this.http.patch<PostUpdate>(this.url + "posts/" + post.id,
             post)
+    }
+
+    deletePost(id: number): Observable<PostUpdate> {
+        return this.http.delete<PostUpdate>(this.url + "posts/" + id);
     }
 }
